@@ -1,7 +1,7 @@
-// src/middleware/auth.middleware.ts
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+// Extinde Request pentru a include user-ul
 export interface AuthRequest extends Request {
   user?: {
     id: number;
@@ -14,24 +14,26 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ message: "Missing token" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
   try {
+    // extrage token-ul din cookie-ul 'token'
+    const token = req.cookies?.token;
+
+    if (!token) {
+      return res.status(401).json({ message: "Missing token" });
+    }
+
+    // verifică și decodează JWT-ul
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: number;
       email: string;
     };
 
-    req.user = payload;
+    // pune payload-ul în req.user
+    req.user = { id: payload.id, email: payload.email };
+
     next();
-  } catch {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (err) {
+    console.error(err);
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
-
