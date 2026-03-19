@@ -21,6 +21,7 @@ export const authMiddleware = (
     if (!token) {
       return res.status(401).json({ message: "Missing token" });
     }
+    console.log("COOKIES:", req.cookies)
 
     // verifică și decodează JWT-ul
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as {

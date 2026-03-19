@@ -5,5 +5,4 @@ export interface getAllResponseDto {
     taskDescription:string
     completed:boolean
     createdAt:Date
-    
 }
