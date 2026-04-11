@@ -14,8 +14,8 @@ app.use(cookieParser());
 
 // Cors - important pentru cookie-uri cross-origin
 app.use(cors({
-  origin: "http://localhost:3000", // frontend-ul tău
-  credentials: true, // permite trimiterea cookie-urilor
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  credentials: true,
 }));
 
 // Routes

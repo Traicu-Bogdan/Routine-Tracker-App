@@ -22,18 +22,12 @@ export const login = async (req: Request, res: Response) => {
     { expiresIn: "1h" }
   );
 
-  console.log('JWT_SECRET:', process.env.JWT_SECRET);
-  console.log("Generated token:", token);
-
-  console.log("Token before cookie:", token);
-
   res.cookie('token', token, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 60 * 60 * 1000
   })
-  console.log("Cookie should be set now:", res.getHeader("Set-Cookie"));
 
   return res.json({
     message: "Login successful",

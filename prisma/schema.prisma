@@ -9,14 +9,15 @@ datasource db {
 }
 
 model Todo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  taskDescription String @default("")
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  userId    Int
-  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(200)
+  taskDescription String   @default("") @db.VarChar(2000)
+  completed       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  userId          Int
+  User            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@schema("public")
 }
 
